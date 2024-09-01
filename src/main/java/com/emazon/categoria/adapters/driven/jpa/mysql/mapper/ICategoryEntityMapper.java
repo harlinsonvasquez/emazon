@@ -1,5 +1,6 @@
 package com.emazon.categoria.adapters.driven.jpa.mysql.mapper;
 import com.emazon.categoria.adapters.driven.jpa.mysql.entity.CategoryEntity;
+import com.emazon.categoria.domain.model.Category;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -8,5 +9,5 @@ import java.util.List;
 public interface ICategoryEntityMapper {
     Category toModel(CategoryEntity categoryEntity);
     CategoryEntity toEntity(Category category);
-    List<Category> toModelList(List<CategoryEntity> categoryEntities);>
+    List<Category> toModelList(List<CategoryEntity> categoryEntities);
 }

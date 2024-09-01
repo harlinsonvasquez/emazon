@@ -3,12 +3,16 @@ package com.emazon.categoria.adapters.driving.http.dtos.request;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@AllArgsConstructor
 @Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AddCategoryRequest {
     @NotBlank
-    private final String name;
+    private  String name;
     @NotBlank
-    private final String description;
+    private  String description;
 }

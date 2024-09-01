@@ -1,20 +1,36 @@
 package com.emazon.categoria.adapters.driven.jpa.mysql.adapter;
 
+import com.emazon.categoria.adapters.driven.jpa.mysql.entity.CategoryEntity;
+import com.emazon.categoria.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
+import com.emazon.categoria.adapters.driven.jpa.mysql.exception.NoDataFoundException;
+import com.emazon.categoria.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.emazon.categoria.adapters.driven.jpa.mysql.mapper.ICategoryEntityMapper;
 import com.emazon.categoria.adapters.driven.jpa.mysql.repository.ICategoryRepository;
+import com.emazon.categoria.domain.model.Category;
+import com.emazon.categoria.domain.spi.ICategoryPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-@RequiredArgsConstructor
-public class CategoryAdapter implements ICategoryPersistencePort{
+import java.util.List;
+
+
+public class CategoryAdapter implements ICategoryPersistencePort {
     private final ICategoryRepository categoryRepository;
     private final ICategoryEntityMapper categoryEntityMapper;
 
+    public CategoryAdapter(ICategoryRepository categoryRepository, ICategoryEntityMapper categoryEntityMapper) {
+        this.categoryRepository = categoryRepository;
+        this.categoryEntityMapper = categoryEntityMapper;
+    }
+
     @Override
-    public void saveCategory(Category category) {
+    public Category saveCategory(Category category) {
         if (categoryRepository.findByName(category.getName()).isPresent()) {
             throw new CategoryAlreadyExistsException();
         }
-        categoryRepository.save(categoryEntityMapper.toEntity(category));
+        CategoryEntity savedEntity = categoryRepository.save(categoryEntityMapper.toEntity(category)); // Aquí obtenemos la entidad guardada
+        return categoryEntityMapper.toModel(savedEntity);
     }
 
     @Override

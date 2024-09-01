@@ -1,6 +1,7 @@
 package com.emazon.categoria.adapters.driving.http.mapper;
 
 import com.emazon.categoria.adapters.driving.http.dtos.response.CategoryResponse;
+import com.emazon.categoria.domain.model.Category;
 import org.mapstruct.Mapper;
 
 import java.util.List;

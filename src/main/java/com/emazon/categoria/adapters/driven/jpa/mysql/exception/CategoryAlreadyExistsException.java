@@ -4,4 +4,8 @@ public class CategoryAlreadyExistsException extends RuntimeException{
     public CategoryAlreadyExistsException() {
         super("La categoría ya existe.");
     }
+
+    public CategoryAlreadyExistsException(String message) {
+        super(message);
+    }
 }
