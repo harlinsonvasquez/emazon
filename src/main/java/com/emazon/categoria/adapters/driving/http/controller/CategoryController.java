@@ -37,7 +37,22 @@ public class CategoryController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<CategoryResponse>> getAllCategories(@RequestParam Integer page, @RequestParam Integer size) {
-        return ResponseEntity.ok(categoryResponseMapper.toResponseList(categoryServicePort.getAllCategories(page, size)));
+    public ResponseEntity<List<CategoryResponse>> getAllCategories(
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam(defaultValue = "asc") String sortOrder) {
+
+
+        sortOrder = sortOrder.trim();
+
+        if (!sortOrder.equalsIgnoreCase("asc") && !sortOrder.equalsIgnoreCase("desc")) {
+            throw new IllegalArgumentException("Invalid sortOrder value. Must be 'asc' or 'desc'.");
+        }
+
+        List<CategoryResponse> categories = categoryResponseMapper.toResponseList(
+                categoryServicePort.getAllCategories(page, size, sortOrder.trim())
+        );
+        return ResponseEntity.ok(categories);
     }
+
 }

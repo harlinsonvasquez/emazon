@@ -16,7 +16,7 @@ public class CategoryUseCase implements ICategoryServicePort {
 
     @Override
     public Category saveCategory(Category category) {
-        return categoryPersistencePort.saveCategory(category); // Devuelve el objeto Category guardado
+        return categoryPersistencePort.saveCategory(category);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class CategoryUseCase implements ICategoryServicePort {
     }
 
     @Override
-    public List<Category> getAllCategories(Integer page, Integer size) {
-        return categoryPersistencePort.getAllCategories(page, size);
+    public List<Category> getAllCategories(Integer page, Integer size,String sortOrder) {
+        return categoryPersistencePort.getAllCategories(page, size,sortOrder);
     }
 }

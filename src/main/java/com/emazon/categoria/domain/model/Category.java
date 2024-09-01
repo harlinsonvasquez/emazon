@@ -3,6 +3,7 @@ package com.emazon.categoria.domain.model;
 import com.emazon.categoria.domain.exception.EmptyFieldException;
 import com.emazon.categoria.domain.util.DomainConstants;
 
+import static java.util.Objects.requireNonNull;
 public class Category {
     private final Long id;
     private final String name;
@@ -16,8 +17,8 @@ public class Category {
             throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
         }
         this.id = id;
-        this.name = name;
-        this.description = description;
+        this.name = requireNonNull(name,DomainConstants.FIELD_NAME_NULL_MESSAGE);
+        this.description = requireNonNull(description,DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
     }
 
     public Long getId() {
