@@ -11,6 +11,7 @@ import com.emazon.categoria.domain.spi.ICategoryPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -41,9 +42,9 @@ public class CategoryAdapter implements ICategoryPersistencePort {
     }
 
     @Override
-    public List<Category> getAllCategories(Integer page, Integer size) {
-        Pageable pagination = PageRequest.of(page, size);
-        List<CategoryEntity> categories = categoryRepository.findAll(pagination).getContent();
+    public List<Category> getAllCategories(Integer page, Integer size,String sortOrder) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), "name"));
+        List<CategoryEntity> categories = categoryRepository.findAll(pageable).getContent();
         if (categories.isEmpty()) {
             throw new NoDataFoundException();
         }
