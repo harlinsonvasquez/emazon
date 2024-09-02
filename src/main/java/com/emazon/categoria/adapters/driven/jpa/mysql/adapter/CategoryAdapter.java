@@ -8,7 +8,6 @@ import com.emazon.categoria.adapters.driven.jpa.mysql.mapper.ICategoryEntityMapp
 import com.emazon.categoria.adapters.driven.jpa.mysql.repository.ICategoryRepository;
 import com.emazon.categoria.domain.model.Category;
 import com.emazon.categoria.domain.spi.ICategoryPersistencePort;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

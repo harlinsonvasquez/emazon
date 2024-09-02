@@ -1,4 +1,5 @@
 package com.emazon.categoria.controllerTest;
+import com.emazon.categoria.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.emazon.categoria.adapters.driving.http.controller.BrandController;
 import com.emazon.categoria.adapters.driving.http.dtos.request.BrandRequest;
 import com.emazon.categoria.adapters.driving.http.dtos.response.BrandResponse;
@@ -14,8 +15,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 public class BrandControllerTest {
 
@@ -75,6 +79,43 @@ public class BrandControllerTest {
             brandController.addBrand(request);
         } catch (IllegalArgumentException e) {
             assertEquals("Brand name already exists", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetAllBrands_Success() {
+
+        Brand brand1 = new Brand(1L, "Nike", "Sportswear");
+        Brand brand2 = new Brand(2L, "Adidas", "Sportswear");
+        List<Brand> mockBrands = Arrays.asList(brand1, brand2);
+
+        BrandResponse response1 = new BrandResponse(1L, "Nike", "Sportswear");
+        BrandResponse response2 = new BrandResponse(2L, "Adidas", "Sportswear");
+        List<BrandResponse> mockResponses = Arrays.asList(response1, response2);
+
+
+        when(brandServicePort.getAllbrans(anyInt(), anyInt(), anyString())).thenReturn(mockBrands);
+        when(brandResponseMapper.toResponseList(mockBrands)).thenReturn(mockResponses);
+
+
+        ResponseEntity<List<BrandResponse>> response = brandController.getAllBrands(0, 10, "asc");
+
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, response.getBody().size());
+        assertEquals("Nike", response.getBody().get(0).getName());
+        assertEquals("Adidas", response.getBody().get(1).getName());
+    }
+
+    @Test
+    public void testGetAllBrands_NoDataFound() {
+
+        when(brandServicePort.getAllbrans(anyInt(), anyInt(), anyString())).thenThrow(new NoDataFoundException());
+
+        try {
+            brandController.getAllBrands(0, 10, "asc");
+        } catch (NoDataFoundException e) {
+            assertEquals("No se encontraron datos.", e.getMessage());
         }
     }
 }
