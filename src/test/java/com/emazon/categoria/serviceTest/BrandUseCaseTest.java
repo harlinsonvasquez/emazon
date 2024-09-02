@@ -1,4 +1,5 @@
 package com.emazon.categoria.serviceTest;
+import com.emazon.categoria.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.emazon.categoria.domain.api.usecase.BrandUseCase;
 import com.emazon.categoria.domain.model.Brand;
 import com.emazon.categoria.domain.spi.IBrandPersistencePort;
@@ -8,8 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doThrow;
 public class BrandUseCaseTest {
@@ -55,6 +59,38 @@ public class BrandUseCaseTest {
             brandUseCase.saveBrand(brand);
         } catch (IllegalArgumentException e) {
             assertEquals("Brand name already exists", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetAllBrands_Success() {
+
+        Brand brand1 = new Brand(1L, "Nike", "Sportswear");
+        Brand brand2 = new Brand(2L, "Adidas", "Sportswear");
+        List<Brand> mockBrands = Arrays.asList(brand1, brand2);
+
+
+        when(brandPersistencePort.getAllbrans(anyInt(), anyInt(), anyString())).thenReturn(mockBrands);
+
+
+        List<Brand> result = brandUseCase.getAllbrans(0, 10, "asc");
+
+
+        assertEquals(2, result.size());
+        assertEquals("Nike", result.get(0).getName());
+        assertEquals("Adidas", result.get(1).getName());
+    }
+
+    @Test
+    public void testGetAllBrands_NoDataFound() {
+
+        doThrow(new NoDataFoundException()).when(brandPersistencePort).getAllbrans(anyInt(), anyInt(), anyString());
+
+
+        try {
+            brandUseCase.getAllbrans(0, 10, "asc");
+        } catch (NoDataFoundException e) {
+            assertEquals("No se encontraron datos.", e.getMessage());
         }
     }
 }
