@@ -30,7 +30,7 @@ public class CategoryAdapter implements ICategoryPersistencePort {
         if (categoryRepository.findByName(category.getName()).isPresent()) {
             throw new CategoryAlreadyExistsException();
         }
-        CategoryEntity savedEntity = categoryRepository.save(categoryEntityMapper.toEntity(category)); // Aquí obtenemos la entidad guardada
+        CategoryEntity savedEntity = categoryRepository.save(categoryEntityMapper.toEntity(category));
         return categoryEntityMapper.toModel(savedEntity);
     }
 
